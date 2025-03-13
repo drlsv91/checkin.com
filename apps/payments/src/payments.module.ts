@@ -13,8 +13,8 @@ import * as Joi from 'joi';
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required(),
-        AUTH_HOST: Joi.string().required(),
-        AUTH_PORT: Joi.number().required(),
+        STRIPE_SECRET_KEY: Joi.string().required(),
+        STRIPE_PUBLIC_KEY: Joi.string().required(),
       }),
     }),
   ],
