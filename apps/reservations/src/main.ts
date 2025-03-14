@@ -13,6 +13,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
   const PORT = configService.get('PORT');
-  await app.listen(PORT, () => logger.log(`Starting application: [${PORT}]`));
+  await app.listen(PORT, '0.0.0.0', () =>
+    logger.log(`Starting application: [${PORT}]!`),
+  );
 }
 bootstrap();
