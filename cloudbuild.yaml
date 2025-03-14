@@ -56,3 +56,5 @@ steps:
         'push',
         'us-east4-docker.pkg.dev/checkin-453710/notifications/production',
       ]
+options:
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
