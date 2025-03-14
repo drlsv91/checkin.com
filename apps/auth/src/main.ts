@@ -24,6 +24,8 @@ async function bootstrap() {
 
   const PORT = configService.get('HTTP_PORT');
   await app.startAllMicroservices();
-  await app.listen(PORT, () => logger.log(`Starting AUTH on port [${PORT}]`));
+  await app.listen(PORT, '0.0.0.0', () =>
+    logger.log(`Starting AUTH on port [${PORT}]!`),
+  );
 }
 bootstrap();
