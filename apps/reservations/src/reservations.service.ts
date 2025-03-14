@@ -22,6 +22,7 @@ export class ReservationsService {
             ...createReservationDto,
             timestamp: new Date(),
             userId: user._id,
+            invoiceId: response.id,
           });
         }),
       );
