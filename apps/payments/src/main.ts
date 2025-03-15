@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
 import { Logger as NestLogger } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
+import { PAYMENT_SERVICE } from '@app/common';
 
 async function bootstrap() {
   const logger = new NestLogger(bootstrap.name);
@@ -12,10 +13,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const PORT = configService.get('PORT');
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      host: '0.0.0.0',
-      port: PORT,
+      urls: [configService.getOrThrow('RABBITMQ_URI')],
+      noAck: false,
+      queue: PAYMENT_SERVICE,
     },
   });
 

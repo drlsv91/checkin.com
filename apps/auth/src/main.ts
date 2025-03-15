@@ -5,16 +5,17 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { Transport } from '@nestjs/microservices';
+import { AUTH_SERVICE } from '@app/common';
 
 async function bootstrap() {
   const logger = new NestLogger(bootstrap.name);
   const app = await NestFactory.create(AuthModule);
   const configService = app.get(ConfigService);
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      host: '0.0.0.0',
-      port: configService.get('TCP_PORT'),
+      urls: [configService.getOrThrow('RABBITMQ_URI')],
+      queue: AUTH_SERVICE,
     },
   });
   app.use(cookieParser());
@@ -25,7 +26,7 @@ async function bootstrap() {
   const PORT = configService.get('HTTP_PORT');
   await app.startAllMicroservices();
   await app.listen(PORT, '0.0.0.0', () =>
-    logger.log(`Starting AUTH on port [${PORT}]!`),
+    logger.log(`Starting AUTH on port! [${PORT}]!`),
   );
 }
 bootstrap();

@@ -19,19 +19,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required(),
         STRIPE_SECRET_KEY: Joi.string().required(),
-        STRIPE_PUBLIC_KEY: Joi.string().required(),
-        NOTIFICATION_HOST: Joi.string().required(),
-        NOTIFICATION_PORT: Joi.number().required(),
+        RABBITMQ_URI: Joi.string().required(),
       }),
     }),
     ClientsModule.registerAsync([
       {
         name: NOTIFICATION_SERVICE,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get('NOTIFICATION_HOST'),
-            port: configService.get('NOTIFICATION_PORT'),
+            urls: [configService.get<string>('RABBITMQ_URI')],
+            queue: 'notifications',
           },
         }),
         inject: [ConfigService],
